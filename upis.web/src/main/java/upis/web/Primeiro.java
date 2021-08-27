@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/ops")
 public class Primeiro extends HttpServlet{
@@ -18,6 +19,8 @@ public class Primeiro extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		PrintWriter out = resp.getWriter();
+		
+		HttpSession session = req.getSession();
 		
 		out.println("<html>");
 		out.println("<head>");
@@ -31,19 +34,26 @@ public class Primeiro extends HttpServlet{
 		if (req.getParameter("user").equals("teste")) {
 			if (req.getParameter("password").equals("123")) {
 					out.println("<h3>Seja bem vindo! <br /><br /> Usuário: "+req.getParameter("user") + "<br /> Senha: " + req.getParameter("password") + "</h3>");
-					out.println("<h3>Logins corretos: "+ ++ contCorreto + "</h3>");
+					out.println("<h3>Logins corretos: "+ ++ contCorreto + "</h3>");	
 			}else {
 				out.println("<h2>Senha incorreta </h2>");
 				contIncorreto++;
 				out.println("<h3>Logins incorretos: " + contIncorreto + "</h3>");
+				session.invalidate();
+				session = req.getSession(false);
 				  }
 		}else {
 			out.println("<h2>Usuário incorreto</h2>");
 			contIncorreto++;
 			out.println("<h3>Logins incorretos: " + contIncorreto + "</h3>");
+			session.invalidate();
+			session = req.getSession(false);
 			  }
 		
-		out.println("<input type=\"button\" value=\"Voltar\" onClick=\"history.go(-1)\"> ");
+		out.println("<input type=\"button\" value=\"VOLTAR\" onClick=\"history.go(-1)\"> ");
+		
+		out.println("<h3>ID de sessão: "+ session.getId() + "</h3>");
+		
 		out.println("</div>");
 		out.println("</body>");
 		out.println("</html>");
@@ -63,5 +73,5 @@ public class Primeiro extends HttpServlet{
 		out.println("</body>");
 		out.println("</html>");
 	}
-
+	
 }
